@@ -10,7 +10,7 @@ interface Mobile {
 }
 
 export const Container = styled.aside<Mobile>`
-  background-color: #28262e;
+  background-color: ${props => props.theme.colors.primary};
   grid-area: ASIDE;
   height: 100vh;
 
@@ -82,6 +82,7 @@ export const LinkMenu = styled(Link)<LinkProps>`
   font-weight: 500;
   letter-spacing: 1px;
   transition: color 0.2s;
+  color: ${props => props.theme.colors.white};
 
   ${props =>
     props.selected &&

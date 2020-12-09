@@ -11,8 +11,8 @@ export const Container = styled.div<ContainerProps>`
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: #232129;
-  border: 2px solid #232129;
+  background-color: ${props => props.theme.colors.inputBackground};
+  border: 2px solid ${props => props.theme.colors.inputBackground};
   border-radius: 8px;
   padding: 10px;
   color: #666360;

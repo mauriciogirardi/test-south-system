@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { FaArchive, FaGripLines, FaHeart } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 
 import booksSvg from 'assets/books.svg';
+import { useTheme } from 'hooks/theme';
+import Toggle from 'components/Toggle';
 import { Container, Header, Content, LinkMenu } from './styles';
 
 const link = [
@@ -18,8 +19,16 @@ const link = [
 ];
 
 const Aside: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+  const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark');
+
   const [selected, setSelected] = useState(0);
   const [menuMobile, setMenuMobile] = useState(true);
+
+  const handleChangeTheme = useCallback(() => {
+    setDarkTheme(!darkTheme);
+    toggleTheme();
+  }, [darkTheme, toggleTheme]);
 
   const handleMenuMobile = useCallback(() => {
     setMenuMobile(prevState => !prevState);
@@ -58,6 +67,7 @@ const Aside: React.FC = () => {
             </LinkMenu>
           </button>
         ))}
+        <Toggle checked={darkTheme} onChange={handleChangeTheme} />
       </Content>
     </Container>
   );

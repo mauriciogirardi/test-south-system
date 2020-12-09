@@ -9,8 +9,8 @@ export default createGlobalStyle`
   }
 
   body {
-    background: #312e38  ;
-    color: #F4EDE8;
+    background-color: ${props => props.theme.colors.secondary};
+    color: ${props => props.theme.colors.white};
     height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
