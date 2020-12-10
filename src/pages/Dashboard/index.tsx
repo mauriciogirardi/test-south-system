@@ -1,22 +1,42 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FiSearch } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 
+import api from 'service/api';
 import Input from 'components/Input';
+import Loding from 'components/Loding';
 import getValidationErrors from 'utils/getValidationErrors';
 import { useToast } from 'hooks/toast';
 
-import { Container } from './styles';
+import { Container, ListBooks, Content, Books } from './styles';
+
+interface DashboardFormData {
+  search: string;
+}
+
+interface BookData {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors: string;
+    imageLinks: {
+      thumbnail: string;
+    };
+  };
+}
 
 const Dashboard: React.FC = () => {
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
+  const [books, setBookes] = useState<BookData[]>([]);
+  const [loding, setLoding] = useState(false);
 
   const handleSubmit = useCallback(
-    async (data: object) => {
+    async (data: DashboardFormData) => {
       try {
+        setLoding(true);
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -27,8 +47,10 @@ const Dashboard: React.FC = () => {
           abortEarly: false,
         });
 
-        // Api
-        console.log(data);
+        const response = await api.get(`/volumes?q=${data.search}`);
+        setBookes(response.data.items);
+
+        setLoding(false);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -41,7 +63,7 @@ const Dashboard: React.FC = () => {
           type: 'error',
           title: 'Erro na pesquisa por livro!',
           description:
-            'Ocorreu um erro ao fazer uma pesquisa por livro, tente novamente.',
+            'Ocorreu um erro ao fazer a pesquisa por livro, tente novamente.',
         });
       }
     },
@@ -61,6 +83,26 @@ const Dashboard: React.FC = () => {
         />
         <button type="submit">Pesquisar</button>
       </Form>
+
+      <Books>
+        {books &&
+          books.map(book => (
+            <ListBooks key={book.id}>
+              <img
+                src={book.volumeInfo.imageLinks.thumbnail}
+                alt={book.volumeInfo.title}
+              />
+              <Content>
+                <h1>{book.volumeInfo.title}</h1>
+                <button type="button">Ver Detalhes</button>
+              </Content>
+            </ListBooks>
+          ))}
+
+        {books === undefined && <h2>Livro não encontrado, tente outro!</h2>}
+      </Books>
+
+      {loding && <Loding />}
     </Container>
   );
 };

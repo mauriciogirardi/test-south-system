@@ -2,11 +2,11 @@ export default {
   title: 'light',
 
   colors: {
-    primary: '#ededed',
-    secondary: '#FFFFFF',
-    tertiary: '#FFF',
+    primary: '#FFFFFF',
+    secondary: '#ededed',
+    tertiary: '#FFFFFF',
 
-    inputBackground: '#ededed',
+    inputBackground: '#FFFFFF',
     colorMenu: '#494949',
 
     white: '#494949',

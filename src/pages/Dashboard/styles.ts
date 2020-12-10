@@ -36,3 +36,45 @@ export const Container = styled.div`
     margin-bottom: 30px;
   }
 `;
+
+export const Books = styled.div`
+  display: flex;
+  margin: 50px 0;
+  justify-content: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+`;
+
+export const ListBooks = styled.section`
+  background-color: ${props => props.theme.colors.tertiary};
+  border-radius: 10px;
+  margin-top: 50px;
+  max-width: 200px;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  img {
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: 250px;
+    margin-bottom: 10px;
+  }
+`;
+
+export const Content = styled.div`
+  padding: 10px;
+  position: relative;
+  flex: 1;
+
+  h1 {
+    font-size: 17px;
+    margin-bottom: 40px;
+  }
+
+  > button {
+    position: absolute;
+    bottom: 10px;
+  }
+`;

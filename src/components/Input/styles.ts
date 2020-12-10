@@ -50,6 +50,12 @@ export const Container = styled.div<ContainerProps>`
     &::placeholder {
       color: #666360;
     }
+
+    &:-webkit-autofill {
+      -webkit-text-fill-color: ${props => props.theme.colors.white};
+      -webkit-box-shadow: 0 0 0px 1000px
+        ${props => props.theme.colors.inputBackground} inset;
+    }
   }
 `;
 
