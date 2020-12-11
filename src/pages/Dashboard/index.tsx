@@ -7,6 +7,7 @@ import { FormHandles } from '@unform/core';
 import api from 'service/api';
 import Input from 'components/Input';
 import Loding from 'components/Loding';
+import ModalInfoBook from 'components/ModalInfoBook';
 import getValidationErrors from 'utils/getValidationErrors';
 import { useToast } from 'hooks/toast';
 
@@ -22,7 +23,7 @@ interface BookData {
     title: string;
     authors: string;
     imageLinks: {
-      thumbnail: string;
+      smallThumbnail: string;
     };
   };
 }
@@ -31,13 +32,18 @@ const Dashboard: React.FC = () => {
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
   const [books, setBookes] = useState<BookData[]>([]);
+  const [bookId, setBookId] = useState<string>();
   const [loding, setLoding] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = useCallback(
     async (data: DashboardFormData) => {
       try {
-        setLoding(true);
         formRef.current?.setErrors({});
+
+        if (data.search !== '') {
+          setLoding(true);
+        }
 
         const schema = Yup.object().shape({
           search: Yup.string().required('Campo obrigatório.'),
@@ -51,6 +57,7 @@ const Dashboard: React.FC = () => {
         setBookes(response.data.items);
 
         setLoding(false);
+        formRef.current?.reset();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -70,8 +77,22 @@ const Dashboard: React.FC = () => {
     [addToast],
   );
 
+  const handleModalIsOpen = useCallback(() => {
+    setIsOpen(prevState => !prevState);
+  }, []);
+
+  const handleInfoBook = useCallback(
+    (id: string) => {
+      handleModalIsOpen();
+      setBookId(id);
+    },
+    [handleModalIsOpen],
+  );
+
   return (
     <Container>
+      {loding && <Loding />}
+
       <h1>Encontre seu book aqui!</h1>
       <Form onSubmit={handleSubmit} ref={formRef}>
         <Input
@@ -84,25 +105,34 @@ const Dashboard: React.FC = () => {
         <button type="submit">Pesquisar</button>
       </Form>
 
+      {isOpen && <ModalInfoBook idBook={bookId} isOpen={handleModalIsOpen} />}
+
       <Books>
         {books &&
           books.map(book => (
             <ListBooks key={book.id}>
-              <img
-                src={book.volumeInfo.imageLinks.thumbnail}
-                alt={book.volumeInfo.title}
-              />
+              {book.volumeInfo.imageLinks &&
+                book.volumeInfo.imageLinks.smallThumbnail && (
+                  <img
+                    src={book.volumeInfo.imageLinks.smallThumbnail}
+                    alt={book.volumeInfo.title}
+                  />
+                )}
+
               <Content>
-                <h1>{book.volumeInfo.title}</h1>
-                <button type="button">Ver Detalhes</button>
+                <h1>
+                  {book.volumeInfo.title.substring(0, 15)}
+                  {book.volumeInfo.title.length > 15 && <span> ...</span>}
+                </h1>
+                <button type="button" onClick={() => handleInfoBook(book.id)}>
+                  Ver Detalhes
+                </button>
               </Content>
             </ListBooks>
           ))}
 
         {books === undefined && <h2>Livro não encontrado, tente outro!</h2>}
       </Books>
-
-      {loding && <Loding />}
     </Container>
   );
 };

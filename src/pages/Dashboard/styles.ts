@@ -56,9 +56,10 @@ export const ListBooks = styled.section`
   flex-direction: column;
 
   img {
-    border-radius: 10px 10px 0 0;
-    width: 100%;
+    width: 200px;
     height: 250px;
+    object-position: top;
+    object-fit: cover;
     margin-bottom: 10px;
   }
 `;
