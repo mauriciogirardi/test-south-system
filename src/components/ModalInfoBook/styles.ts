@@ -56,7 +56,6 @@ export const Buy = styled.div<BuyProps>`
 export const Content = styled.div`
   margin-left: 16px;
   overflow-x: auto;
-  width: 100%;
 
   button {
     background-color: transparent;

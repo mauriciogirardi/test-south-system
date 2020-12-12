@@ -72,11 +72,12 @@ const ModalInfoBook: React.FC<ModalProps> = ({ isOpen, idBook }) => {
               </a>
             )}
           </Buy>
-
           <Content>
             <h1>{book.volumeInfo.title}</h1>
             <p>{book.volumeInfo.subtitle}</p>
-            <article>{book.volumeInfo.description}</article>
+            <article>
+              {book.volumeInfo.description.replaceAll(/<[^>]+>/g, ' ')}
+            </article>
 
             <Categories>
               <h4>

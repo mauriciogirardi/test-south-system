@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FiSearch } from 'react-icons/fi';
+import { BsHeartFill, BsHeart } from 'react-icons/bs';
 import { FormHandles } from '@unform/core';
 
 import api from 'service/api';
@@ -11,7 +12,7 @@ import ModalInfoBook from 'components/ModalInfoBook';
 import getValidationErrors from 'utils/getValidationErrors';
 import { useToast } from 'hooks/toast';
 
-import { Container, ListBooks, Content, Books } from './styles';
+import { Container, ListBooks, Content, Books, Actions } from './styles';
 
 interface DashboardFormData {
   search: string;
@@ -19,9 +20,9 @@ interface DashboardFormData {
 
 interface BookData {
   id: string;
+  favorite: boolean;
   volumeInfo: {
     title: string;
-    authors: string;
     imageLinks: {
       smallThumbnail: string;
     };
@@ -31,10 +32,11 @@ interface BookData {
 const Dashboard: React.FC = () => {
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
-  const [books, setBookes] = useState<BookData[]>([]);
   const [bookId, setBookId] = useState<string>();
   const [loding, setLoding] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [books, setBookes] = useState<BookData[]>([]);
 
   const handleSubmit = useCallback(
     async (data: DashboardFormData) => {
@@ -54,6 +56,7 @@ const Dashboard: React.FC = () => {
         });
 
         const response = await api.get(`/volumes?q=${data.search}`);
+
         setBookes(response.data.items);
 
         setLoding(false);
@@ -75,6 +78,23 @@ const Dashboard: React.FC = () => {
       }
     },
     [addToast],
+  );
+
+  const handleFavoriteBook = useCallback(
+    (id: string) => {
+      const findFavorite = books.map(favorite =>
+        favorite.id === id
+          ? { ...favorite, favorite: !favorite.favorite }
+          : favorite,
+      );
+      setBookes(findFavorite);
+
+      localStorage.setItem(
+        '@BookGoogle',
+        JSON.stringify(findFavorite.filter(f => f.favorite)),
+      );
+    },
+    [books],
   );
 
   const handleModalIsOpen = useCallback(() => {
@@ -124,9 +144,22 @@ const Dashboard: React.FC = () => {
                   {book.volumeInfo.title.substring(0, 15)}
                   {book.volumeInfo.title.length > 15 && <span> ...</span>}
                 </h1>
-                <button type="button" onClick={() => handleInfoBook(book.id)}>
-                  Ver Detalhes
-                </button>
+                <Actions>
+                  <button
+                    className="detail"
+                    type="button"
+                    onClick={() => handleInfoBook(book.id)}
+                  >
+                    Ver Detalhes
+                  </button>
+                  <button
+                    className="favorite"
+                    type="button"
+                    onClick={() => handleFavoriteBook(book.id)}
+                  >
+                    {book.favorite ? <BsHeartFill /> : <BsHeart />}
+                  </button>
+                </Actions>
               </Content>
             </ListBooks>
           ))}
