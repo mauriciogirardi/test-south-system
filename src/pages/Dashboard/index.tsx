@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { Form } from '@unform/web';
 import { FiSearch } from 'react-icons/fi';
@@ -8,11 +8,19 @@ import { FormHandles } from '@unform/core';
 import api from 'service/api';
 import Input from 'components/Input';
 import Loding from 'components/Loding';
+import Pagination from 'components/Pagination';
 import ModalInfoBook from 'components/ModalInfoBook';
 import getValidationErrors from 'utils/getValidationErrors';
 import { useToast } from 'hooks/toast';
 
-import { Container, ListBooks, Content, Books, Actions } from './styles';
+import {
+  Container,
+  ListBooks,
+  Content,
+  Books,
+  Actions,
+  NotImage,
+} from './styles';
 
 interface DashboardFormData {
   search: string;
@@ -36,16 +44,16 @@ const Dashboard: React.FC = () => {
   const [loding, setLoding] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  const [totalPage, setTotalPage] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+
   const [books, setBookes] = useState<BookData[]>([]);
+  const [search, setSearch] = useState('');
 
   const handleSubmit = useCallback(
     async (data: DashboardFormData) => {
       try {
         formRef.current?.setErrors({});
-
-        if (data.search !== '') {
-          setLoding(true);
-        }
 
         const schema = Yup.object().shape({
           search: Yup.string().required('Campo obrigatório.'),
@@ -55,11 +63,8 @@ const Dashboard: React.FC = () => {
           abortEarly: false,
         });
 
-        const response = await api.get(`/volumes?q=${data.search}`);
+        setSearch(data.search);
 
-        setBookes(response.data.items);
-
-        setLoding(false);
         formRef.current?.reset();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -79,6 +84,31 @@ const Dashboard: React.FC = () => {
     },
     [addToast],
   );
+
+  useEffect(() => {
+    async function ApiGoogleBook() {
+      const limitPage = 12;
+
+      if (search !== '') {
+        setLoding(true);
+      }
+
+      if (search) {
+        const response = await api.get(
+          `/volumes?q=${search}&maxResults=${limitPage}&startIndex=${
+            pageIndex * 12
+          }`,
+        );
+
+        setBookes(response.data.items);
+        const total = Math.ceil(response.data.totalItems / limitPage);
+        setTotalPage(total);
+        setLoding(false);
+      }
+    }
+
+    ApiGoogleBook();
+  }, [pageIndex, search]);
 
   const handleFavoriteBook = useCallback(
     (id: string) => {
@@ -108,7 +138,6 @@ const Dashboard: React.FC = () => {
     },
     [handleModalIsOpen],
   );
-
   return (
     <Container>
       {loding && <Loding />}
@@ -132,12 +161,14 @@ const Dashboard: React.FC = () => {
           books.map(book => (
             <ListBooks key={book.id}>
               {book.volumeInfo.imageLinks &&
-                book.volumeInfo.imageLinks.smallThumbnail && (
-                  <img
-                    src={book.volumeInfo.imageLinks.smallThumbnail}
-                    alt={book.volumeInfo.title}
-                  />
-                )}
+              book.volumeInfo.imageLinks.smallThumbnail ? (
+                <img
+                  src={book.volumeInfo.imageLinks.smallThumbnail}
+                  alt={book.volumeInfo.title}
+                />
+              ) : (
+                <NotImage />
+              )}
 
               <Content>
                 <h1>
@@ -166,6 +197,12 @@ const Dashboard: React.FC = () => {
 
         {books === undefined && <h2>Livro não encontrado, tente outro!</h2>}
       </Books>
+
+      <Pagination
+        total={totalPage}
+        activePage={pageIndex === 0 ? 1 : pageIndex}
+        onClick={page => (typeof page === 'number' ? setPageIndex(page) : null)}
+      />
     </Container>
   );
 };

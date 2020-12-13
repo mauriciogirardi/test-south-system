@@ -11,7 +11,7 @@ const rotate = keyframes`
 
 export const Container = styled.section`
   position: absolute;
-  left: 50%;
+  left: calc(50% + 130px);
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;

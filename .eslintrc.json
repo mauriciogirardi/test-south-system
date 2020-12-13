@@ -20,6 +20,11 @@
   },
   "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-plusplus": "off",
+    "react/no-array-index-key":"off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "prefer-destructuring": "off",
     "camelcase": "off",
     "prettier/prettier": "error",
     "operator-linebreak": "off",

@@ -106,3 +106,19 @@ export const Actions = styled.div`
     }
   }
 `;
+
+export const NotImage = styled.div`
+  width: 200px;
+  height: 250px;
+  background-color: #ccc;
+  position: relative;
+
+  &::after {
+    content: 'Sem imagem';
+    color: #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
