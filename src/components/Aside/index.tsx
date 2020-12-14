@@ -42,11 +42,7 @@ const Aside: React.FC = () => {
   return (
     <Container menuMobile={menuMobile}>
       <button type="button" onClick={handleMenuMobile}>
-        {menuMobile ? (
-          <FiX size={30} color="#fff" />
-        ) : (
-          <FaGripLines size={30} color="#fff" />
-        )}
+        {menuMobile ? <FiX size={30} /> : <FaGripLines size={30} />}
       </button>
 
       <Header>

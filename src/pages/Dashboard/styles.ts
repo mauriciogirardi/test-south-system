@@ -7,6 +7,14 @@ export const Container = styled.div`
   max-width: 930px;
   width: 100%;
 
+  @media (max-width: 1080px) {
+    max-width: 700px;
+  }
+
+  @media (max-width: 960px) {
+    max-width: 500px;
+  }
+
   form {
     display: flex;
     align-items: center;
@@ -29,20 +37,51 @@ export const Container = styled.div`
         background-color: ${shade(0.2, '#6c9814')};
       }
     }
+
+    @media (max-width: 500px) {
+      div {
+        max-width: 220px;
+      }
+
+      button {
+        width: 90px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      div {
+        max-width: 200px;
+      }
+
+      button {
+        width: 90px;
+      }
+    }
   }
 
   h1 {
     text-align: center;
     margin-bottom: 30px;
   }
+
+  @media (max-width: 500px) {
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+      margin-top: 50px;
+    }
+  }
 `;
 
 export const Books = styled.div`
   display: flex;
   margin: 50px 0;
-  justify-content: left;
-  /* justify-content: space-around; */
+  justify-content: space-between;
   flex-wrap: wrap;
+
+  @media (max-width: 739px) {
+    justify-content: center;
+  }
 `;
 
 export const ListBooks = styled.section`
@@ -54,7 +93,6 @@ export const ListBooks = styled.section`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
 
   img {
     width: 200px;

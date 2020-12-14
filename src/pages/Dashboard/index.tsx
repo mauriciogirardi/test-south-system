@@ -101,6 +101,7 @@ const Dashboard: React.FC = () => {
         );
 
         setBookes(response.data.items);
+
         const total = Math.ceil(response.data.totalItems / limitPage);
         setTotalPage(total);
         setLoding(false);

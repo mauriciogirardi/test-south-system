@@ -10,14 +10,23 @@ export const Container = styled.div`
   h1 {
     text-align: center;
   }
+
+  @media (max-width: 500px) {
+    h1 {
+      margin-top: 40px;
+    }
+  }
 `;
 
 export const Books = styled.div`
   display: flex;
   margin: 50px 0;
   justify-content: left;
-  /* justify-content: space-around; */
   flex-wrap: wrap;
+
+  @media (max-width: 500px) {
+    justify-content: center;
+  }
 `;
 
 export const ListBooks = styled.section`
@@ -37,6 +46,10 @@ export const ListBooks = styled.section`
     object-position: top;
     object-fit: cover;
     margin-bottom: 10px;
+  }
+
+  @media (max-width: 500px) {
+    margin-right: 0;
   }
 `;
 
@@ -79,5 +92,21 @@ export const Actions = styled.div`
     &:hover {
       color: ${shade(0.2, '#febc3d')};
     }
+  }
+`;
+
+export const NotImage = styled.div`
+  width: 200px;
+  height: 250px;
+  background-color: #ccc;
+  position: relative;
+
+  &::after {
+    content: 'Sem imagem';
+    color: #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `;

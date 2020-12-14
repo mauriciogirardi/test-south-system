@@ -5,4 +5,12 @@ export const Grid = styled.div`
   grid-template-columns: 250px auto;
   grid-template-areas: 'ASIDE MAIN';
   height: 100vh;
+
+  @media (max-width: 500px) {
+    grid-template-columns: auto;
+    grid-template-rows: 60px auto;
+    grid-template-areas:
+      'ASIDE'
+      'MAIN';
+  }
 `;

@@ -2,7 +2,14 @@ import ModalInfoBook from 'components/ModalInfoBook';
 import React, { useCallback, useState } from 'react';
 import { BsHeartFill, BsHeart } from 'react-icons/bs';
 
-import { Container, ListBooks, Content, Books, Actions } from './styles';
+import {
+  Container,
+  ListBooks,
+  Content,
+  Books,
+  Actions,
+  NotImage,
+} from './styles';
 
 interface BookData {
   id: string;
@@ -62,12 +69,14 @@ const Favorites: React.FC = () => {
           favorites.map(book => (
             <ListBooks key={book.id}>
               {book.volumeInfo.imageLinks &&
-                book.volumeInfo.imageLinks.smallThumbnail && (
-                  <img
-                    src={book.volumeInfo.imageLinks.smallThumbnail}
-                    alt={book.volumeInfo.title}
-                  />
-                )}
+              book.volumeInfo.imageLinks.smallThumbnail ? (
+                <img
+                  src={book.volumeInfo.imageLinks.smallThumbnail}
+                  alt={book.volumeInfo.title}
+                />
+              ) : (
+                <NotImage />
+              )}
 
               <Content>
                 <h1>

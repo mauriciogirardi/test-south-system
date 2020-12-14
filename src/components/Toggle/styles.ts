@@ -9,6 +9,10 @@ export const Container = styled.div<ContainerProps>`
   max-width: 100px;
   width: 100%;
   margin-top: 30px;
+  z-index: 1000;
+  position: absolute;
+  bottom: 30px;
+  left: 18px;
 
   display: flex;
   align-items: center;
@@ -20,10 +24,6 @@ export const Container = styled.div<ContainerProps>`
 
   svg.lightbulb {
     color: ${props => (props.checked ? '' : '#fea03f')};
-  }
-
-  @media (max-width: 600px) {
-    display: none;
   }
 `;
 

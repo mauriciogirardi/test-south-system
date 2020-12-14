@@ -4,7 +4,7 @@ export const Container = styled.div`
   grid-area: MAIN;
   width: 100%;
   max-width: 100%;
-  padding: 30px 0 0 50px;
+  padding: 30px 0px;
   height: 100vh;
   overflow-y: auto;
 

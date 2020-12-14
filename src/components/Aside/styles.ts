@@ -23,7 +23,7 @@ export const Container = styled.aside<Mobile>`
   @media (max-width: 500px) {
     z-index: 100;
     position: relative;
-    height: ${props => (props.menuMobile ? '400px' : '100px')};
+    height: ${props => (props.menuMobile ? '250px' : '100px')};
 
     > button {
       border: 0;
@@ -31,6 +31,7 @@ export const Container = styled.aside<Mobile>`
       position: absolute;
       right: 30px;
       top: 30px;
+      color: ${props => props.theme.colors.white};
     }
   }
 `;
@@ -71,7 +72,7 @@ export const Content = styled.ul<Mobile>`
 
   @media (max-width: 500px) {
     max-width: 250px;
-    margin-top: 50px;
+    margin-top: 10px;
     display: ${props => (props.menuMobile ? 'block' : 'none')};
   }
 `;

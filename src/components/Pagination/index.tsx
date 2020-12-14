@@ -9,14 +9,12 @@ interface PaginationProps {
   activePage: number;
   total: number;
 
-  pageLink?: any;
-  onClick: (page: string | number) => void;
+  onClick: (page: number | string) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   activePage,
   total,
-  pageLink,
   onClick,
 }) => (
   <Container>
@@ -26,7 +24,6 @@ const Pagination: React.FC<PaginationProps> = ({
           <Page
             style={activePage === page ? { color: '#6c9814' } : { color: '' }}
             page={page}
-            pageLink={pageLink?.replace('%page%', page)}
             onClick={onClick}
           />
         </li>
