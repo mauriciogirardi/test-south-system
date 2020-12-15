@@ -37,4 +37,7 @@ export const Container = styled.div`
     opacity: 1;
     visibility: visible;
   }
+
+  @media (max-width: 500px) {
+  }
 `;

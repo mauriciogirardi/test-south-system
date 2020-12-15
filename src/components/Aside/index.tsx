@@ -23,7 +23,7 @@ const Aside: React.FC = () => {
   const [darkTheme, setDarkTheme] = useState(() => theme.title === 'dark');
 
   const [selected, setSelected] = useState(0);
-  const [menuMobile, setMenuMobile] = useState(true);
+  const [menuMobile, setMenuMobile] = useState(false);
 
   const handleChangeTheme = useCallback(() => {
     setDarkTheme(!darkTheme);

@@ -75,4 +75,8 @@ export const Error = styled(Tooltip)`
       background-color: #c53030;
     }
   }
+
+  @media (max-width: 500px) {
+    margin-left: -20px;
+  }
 `;

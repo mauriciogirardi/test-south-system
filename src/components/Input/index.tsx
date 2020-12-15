@@ -62,6 +62,7 @@ const Input: React.FC<InputProps> = ({
         onBlur={handleInputBlur}
         defaultValue={defaultValue}
         ref={inputRef}
+        autoComplete="off"
         {...rest}
       />
 

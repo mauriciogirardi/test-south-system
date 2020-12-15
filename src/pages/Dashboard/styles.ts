@@ -40,7 +40,7 @@ export const Container = styled.div`
 
     @media (max-width: 500px) {
       div {
-        max-width: 220px;
+        max-width: 240px;
       }
 
       button {
