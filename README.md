@@ -22,17 +22,20 @@ Critérios de avaliação
   
   ### Como Executar a aplicação
   
-  ```js
-    git clone https://github.com/mauriciogirardi/test-south-system.git
-    
-    // cd test-south-system
-    // comando yarn para instalar as  dependência
-    yarn 
-    
-    // rodar o projeto
-    yarn start
-    
-    //test
-    yarn start
-    yarn test:cypress
-  ```
+  ```sh
+  $ git clone https://github.com/mauriciogirardi/test-south-system.git
+  
+
+  $ cd test-south-system
+  # Installing project dependencies.
+  $ yarn # or npm install
+  # Start web application
+  $ yarn start # ou npm start
+  
+  # test
+  $ yarn start
+  $ yarn test:cypress
+```
+
+## Aplicação 
+https://testsouth.netlify.app/
