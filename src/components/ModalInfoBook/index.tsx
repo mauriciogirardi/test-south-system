@@ -4,7 +4,7 @@ import { IoMdClose } from 'react-icons/io';
 import formattedCurrency from 'utils/formattedCurrency';
 import api from 'service/api';
 
-import Loding from 'components/Loding';
+import Loding from 'components/Lodging';
 import { Container, Content, Modal, Categories, Buy, Preview } from './styles';
 
 interface ModalProps {
@@ -50,7 +50,7 @@ const ModalInfoBook: React.FC<ModalProps> = ({ isOpen, idBook }) => {
   return (
     <>
       {loding && <Loding />}
-      <Container onClick={isOpen} />
+      <Container id="closeModal" onClick={isOpen} />
 
       {book && (
         <Modal>
@@ -76,7 +76,8 @@ const ModalInfoBook: React.FC<ModalProps> = ({ isOpen, idBook }) => {
             <h1>{book.volumeInfo.title}</h1>
             <p>{book.volumeInfo.subtitle}</p>
             <article>
-              {book.volumeInfo.description.replaceAll(/<[^>]+>/g, ' ')}
+              {book.volumeInfo.description &&
+                book.volumeInfo.description.replace(/<[^>]+>/g, ' ')}
             </article>
 
             <Categories>
@@ -95,8 +96,8 @@ const ModalInfoBook: React.FC<ModalProps> = ({ isOpen, idBook }) => {
                     ? 'Categorias'
                     : 'Categoria'}
                 </h4>
-                {book.volumeInfo.categories.map(categori => (
-                  <small key={categori}>{categori}</small>
+                {book.volumeInfo.categories.map(category => (
+                  <small key={category}>{category}</small>
                 ))}
               </Categories>
             )}

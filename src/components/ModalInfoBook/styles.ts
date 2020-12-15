@@ -29,6 +29,15 @@ export const Modal = styled.main`
   z-index: 1000;
   display: flex;
   height: 470px;
+
+  @media (max-width: 768px) {
+    max-width: 700px;
+  }
+
+  @media (max-width: 500px) {
+    max-width: 400px;
+    padding: 40px 15px;
+  }
 `;
 
 export const Buy = styled.div<BuyProps>`
@@ -49,6 +58,15 @@ export const Buy = styled.div<BuyProps>`
 
     &:hover {
       background-color: ${shade(0.2, '#6c9814')};
+    }
+  }
+
+  @media (max-width: 500px) {
+    height: ${props => (props.isBuy ? '170px' : '120px')};
+
+    img {
+      width: 100px;
+      height: 120px;
     }
   }
 `;
@@ -135,5 +153,11 @@ export const Categories = styled.div`
     display: inline-block;
     margin-bottom: 10px;
     margin-right: 10px;
+  }
+
+  @media (max-width: 500px) {
+    small {
+      padding: 10px 20px;
+    }
   }
 `;

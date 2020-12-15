@@ -7,7 +7,7 @@ import { FormHandles } from '@unform/core';
 
 import api from 'service/api';
 import Input from 'components/Input';
-import Loding from 'components/Loding';
+import Lodging from 'components/Lodging';
 import Pagination from 'components/Pagination';
 import ModalInfoBook from 'components/ModalInfoBook';
 import getValidationErrors from 'utils/getValidationErrors';
@@ -21,10 +21,6 @@ import {
   Actions,
   NotImage,
 } from './styles';
-
-interface DashboardFormData {
-  search: string;
-}
 
 interface BookData {
   id: string;
@@ -41,17 +37,17 @@ const Dashboard: React.FC = () => {
   const { addToast } = useToast();
   const formRef = useRef<FormHandles>(null);
   const [bookId, setBookId] = useState<string>();
-  const [loding, setLoding] = useState(false);
+  const [lodging, setLodging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const [totalPage, setTotalPage] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
 
-  const [books, setBookes] = useState<BookData[]>([]);
+  const [books, setBooks] = useState<BookData[]>([]);
   const [search, setSearch] = useState('');
 
   const handleSubmit = useCallback(
-    async (data: DashboardFormData) => {
+    async (data: string) => {
       try {
         formRef.current?.setErrors({});
 
@@ -63,14 +59,11 @@ const Dashboard: React.FC = () => {
           abortEarly: false,
         });
 
-        setSearch(data.search);
-
-        formRef.current?.reset();
+        setSearch(data);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
           formRef.current?.setErrors(errors);
-
           return;
         }
 
@@ -90,7 +83,7 @@ const Dashboard: React.FC = () => {
       const limitPage = 12;
 
       if (search !== '') {
-        setLoding(true);
+        setLodging(true);
       }
 
       if (search) {
@@ -100,11 +93,19 @@ const Dashboard: React.FC = () => {
           }`,
         );
 
-        setBookes(response.data.items);
+        const listFromStorage = localStorage.getItem('@BookGoogle');
+        const favoriteList = listFromStorage ? JSON.parse(listFromStorage) : [];
+
+        const result = response.data.items.map((book: BookData) => ({
+          ...book,
+          favorite: !!favoriteList.find(({ id }: BookData) => id === book.id),
+        }));
+
+        setBooks(result);
 
         const total = Math.ceil(response.data.totalItems / limitPage);
         setTotalPage(total);
-        setLoding(false);
+        setLodging(false);
       }
     }
 
@@ -112,17 +113,20 @@ const Dashboard: React.FC = () => {
   }, [pageIndex, search]);
 
   const handleFavoriteBook = useCallback(
-    (id: string) => {
+    (book: BookData) => {
       const findFavorite = books.map(favorite =>
-        favorite.id === id
+        favorite.id === book.id
           ? { ...favorite, favorite: !favorite.favorite }
           : favorite,
       );
-      setBookes(findFavorite);
+      setBooks(findFavorite);
+
+      const listFromStorage = localStorage.getItem('@BookGoogle');
+      const favoriteList = listFromStorage ? JSON.parse(listFromStorage) : [];
 
       localStorage.setItem(
         '@BookGoogle',
-        JSON.stringify(findFavorite.filter(f => f.favorite)),
+        JSON.stringify([...favoriteList, { ...book, favorite: true }]),
       );
     },
     [books],
@@ -141,13 +145,14 @@ const Dashboard: React.FC = () => {
   );
   return (
     <Container>
-      {loding && <Loding />}
+      {lodging && <Lodging />}
 
       <h1>Encontre seu book aqui!</h1>
       <Form onSubmit={handleSubmit} ref={formRef}>
         <Input
           containerStyle={{ borderRadius: '8px 0 0 8px' }}
           name="search"
+          id="search"
           type="text"
           icon={FiSearch}
           placeholder="pesquise seu livro"
@@ -159,7 +164,7 @@ const Dashboard: React.FC = () => {
 
       <Books>
         {books &&
-          books.map(book => (
+          books.map((book, index) => (
             <ListBooks key={book.id}>
               {book.volumeInfo.imageLinks &&
               book.volumeInfo.imageLinks.smallThumbnail ? (
@@ -187,7 +192,8 @@ const Dashboard: React.FC = () => {
                   <button
                     className="favorite"
                     type="button"
-                    onClick={() => handleFavoriteBook(book.id)}
+                    id={`favorite${index}`}
+                    onClick={() => handleFavoriteBook(book)}
                   >
                     {book.favorite ? <BsHeartFill /> : <BsHeart />}
                   </button>

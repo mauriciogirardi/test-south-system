@@ -15,9 +15,13 @@ export const Container = styled.section`
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
+
+  @media (max-width: 500px) {
+    left: calc(50%);
+  }
 `;
 
-export const BoxLoging = styled.section`
+export const BoxLodging = styled.section`
   position: relative;
   width: 30px;
   height: 30px;
