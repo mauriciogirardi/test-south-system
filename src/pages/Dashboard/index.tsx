@@ -22,6 +22,10 @@ import {
   NotImage,
 } from './styles';
 
+interface FormData {
+  search: string;
+}
+
 interface BookData {
   id: string;
   favorite: boolean;
@@ -47,7 +51,7 @@ const Dashboard: React.FC = () => {
   const [search, setSearch] = useState('');
 
   const handleSubmit = useCallback(
-    async (data: string) => {
+    async (data: FormData) => {
       try {
         formRef.current?.setErrors({});
 
@@ -59,7 +63,7 @@ const Dashboard: React.FC = () => {
           abortEarly: false,
         });
 
-        setSearch(data);
+        setSearch(data.search);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
